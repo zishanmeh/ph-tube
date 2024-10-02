@@ -1,3 +1,23 @@
+// Seconds to hour minutes convert function
+function getTime(time) {
+  //get hour and rest seconds
+  if (time >= 86400) {
+    const day = parseInt(time / 86400);
+    let remaining_seconds = time % 86400;
+    const hour = parseInt(remaining_seconds / 3600);
+    remaining_seconds = hour % 3600;
+    const minute = parseInt(remaining_seconds / 60);
+    remaining_seconds = remaining_seconds % 60;
+    return `${day} days ${hour} hour ${minute} minutes ${remaining_seconds} seconds ago`;
+  } else {
+    const hour = parseInt(time / 3600);
+    let remaining_seconds = time % 3600;
+    const minute = parseInt(remaining_seconds / 60);
+    remaining_seconds = remaining_seconds % 60;
+    return `${hour} hour ${minute} minutes ${remaining_seconds} seconds ago`;
+  }
+}
+
 // Fetch catagories and show
 
 // Create load catagories
@@ -68,7 +88,7 @@ const displayVideos = (videos) => {
         video.others.posted_date?.length === 0
           ? ""
           : `<span class="absolute right-2 bottom-2 bg-black text-white rounded-lg p-1">
-            ${video.others.posted_date}
+            ${getTime(video.others.posted_date)}
           </span>`
       }
       
@@ -102,3 +122,5 @@ const displayVideos = (videos) => {
 
 loadCatagories();
 loadVideos();
+
+// Testing
