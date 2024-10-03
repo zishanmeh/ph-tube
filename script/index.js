@@ -17,6 +17,25 @@ function getTime(time) {
     return `${hour} hour ${minute} minutes ${remaining_seconds} seconds ago`;
   }
 }
+const displayVideoSort = (searchText = "") => {
+  let sortVideo = [];
+  fetch(
+    `https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      // const videoViewsInt = stringToInt(video.others.views);
+      const newData = data.videos.sort((a, b) => {
+        return stringToInt(a.others.views) - stringToInt(b.others.views);
+      });
+      displayVideos(newData);
+    })
+    .catch((err) => console.log(err));
+
+  // for (item of videos) {
+  //   console.log(item);
+  // }
+};
 // Removing active class
 const removeActiveClass = () => {
   const buttons = document.querySelectorAll(".category-btn");
@@ -93,7 +112,7 @@ const displayVideos = (videos) => {
         
     </figure>
     <div class="px-0 py-2 flex gap-2">
-        <div>
+        <div class="ml-2">
             <img class="w-10 h-10 rounded-full object-cover" src=${
               video.authors[0].profile_picture
             } />
@@ -111,6 +130,7 @@ const displayVideos = (videos) => {
 
             
         </div>
+        <p class="text-gray-400 text-sm my-2">${video.others.views}</p>
         <p> <button class="btn btn-sm btn-error text-white" onclick="loadDetails('${
           video.video_id
         }')">details</button> </p>
@@ -159,7 +179,18 @@ document.getElementById("searchInput").addEventListener("keyup", (event) => {
   loadVideos(event.target.value);
 });
 
+document.getElementById("sort_btn").addEventListener("click", () => {
+  displayVideoSort();
+});
+
 loadCatagories();
 loadVideos();
 
 // Testing
+
+function stringToInt(string) {
+  let arr = string.split("");
+  arr.splice(-1);
+
+  return parseInt(arr.join(""));
+}
