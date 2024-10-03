@@ -35,8 +35,10 @@ const loadCatagories = () => {
 };
 
 // Create load videos
-const loadVideos = () => {
-  fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
+const loadVideos = (searchText = "") => {
+  fetch(
+    `https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`
+  )
     .then((res) => res.json())
     .then((data) => displayVideos(data.videos))
     .catch((err) => console.log(err));
@@ -67,7 +69,7 @@ const displayVideos = (videos) => {
   videoContianer.innerHTML = "";
   if (videos.length < 1) {
     videoContianer.innerHTML = `<div class="flex justify-center items-center gap-4 flex-col col-span-full">
-    <img src="assets/img/icon.png "/>
+    <img src="./assets/img/icon.png "/>
     <h2 class="text-center font-bold text-3xl text-gray-600">Oops!! Sorry, There is no<br/>content here</h2>
     </div>`;
     return;
@@ -152,6 +154,10 @@ const displayCatagoris = (categories) => {
     categories_container.append(buttonContainer);
   });
 };
+
+document.getElementById("searchInput").addEventListener("keyup", (event) => {
+  loadVideos(event.target.value);
+});
 
 loadCatagories();
 loadVideos();
