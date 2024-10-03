@@ -42,6 +42,25 @@ const loadVideos = () => {
     .catch((err) => console.log(err));
 };
 
+// load details
+const loadDetails = async (videoId) => {
+  const res = await fetch(
+    `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`
+  );
+  const data = await res.json();
+  displayDetails(data.video);
+};
+// Display details
+const displayDetails = (video) => {
+  const details_container = document.getElementById("modal_content");
+  details_container.innerHTML = `
+    <img class="rounded-xl" src=${video.thumbnail}/>
+    <p class="mt-3 text-gray-400 text-sm">${video.description}</p>
+  `;
+
+  document.getElementById("customModal").showModal();
+};
+
 // Create display videos
 const displayVideos = (videos) => {
   const videoContianer = document.getElementById("videos");
@@ -72,25 +91,28 @@ const displayVideos = (videos) => {
         
     </figure>
     <div class="px-0 py-2 flex gap-2">
-      <div>
-      <img class="w-10 h-10 rounded-full object-cover" src=${
-        video.authors[0].profile_picture
-      }/>
-      </div>
-      <div>
-      <h2 class="font-bold">${video.title}</h2>
-      <div class="flex items-center gap-2">
-      <p class="text-gray-400">${video.authors[0].profile_name}</p>
-      ${
-        video.authors[0].verified === true
-          ? '<img class="w-5" src="https://img.icons8.com/?size=96&id=98A4yZTt9abw&format=png"'
-          : ""
-      }
-      
-  
-      </div>
-      <p></p>
-      </div>
+        <div>
+            <img class="w-10 h-10 rounded-full object-cover" src=${
+              video.authors[0].profile_picture
+            } />
+        </div>
+        <div>
+        <h2 class="font-bold">${video.title}</h2>
+        <div class="flex items-center gap-2">
+            <p class="text-gray-400">${video.authors[0].profile_name}</p>
+
+            ${
+              video.authors[0].verified == true
+                ? `<img class="w-5" src="https://img.icons8.com/?size=96&id=D9RtvkuOe31p&format=png"/>`
+                : ""
+            }
+
+            
+        </div>
+        <p> <button class="btn btn-sm btn-error text-white" onclick="loadDetails('${
+          video.video_id
+        }')">details</button> </p>
+        </div>
     </div>
       `;
 
